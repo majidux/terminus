@@ -1,19 +1,12 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'majid',
-      password: 'majid',
-      database: 'terminus',
-      entities: [],
-      synchronize: true,
-    }),
+    MongooseModule.forRoot(
+      'mongodb+srv://majid:12345@terminus.7i1fkgj.mongodb.net/?retryWrites=true&w=majority',
+    ),
     UsersModule,
   ],
 })
