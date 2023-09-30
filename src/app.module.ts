@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { constants } from './constant';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DATABASE_CONNECTION_STRING),
+    MongooseModule.forRoot(constants.dataBaseConnectionString),
     ConfigModule.forRoot(),
     UsersModule,
   ],
