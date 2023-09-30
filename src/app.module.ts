@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://majid:12345@terminus.7i1fkgj.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRoot(process.env.DATABASE_CONNECTION_STRING),
+    ConfigModule.forRoot(),
     UsersModule,
   ],
 })
