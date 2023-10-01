@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+// import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
+import { User } from './user.model';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
@@ -18,8 +28,21 @@ export class UsersController {
       },
     },
   })
-  login(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.findOne(createUserDto.firstName);
+  async login(
+    @Body() loginData: { username: string; password: string },
+  ): Promise<User> {
+    const { username, password } = loginData;
+    const user: any = await this.usersService.findOne(username);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.password !== password) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return user;
   }
 
   @Get()
