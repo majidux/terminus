@@ -7,12 +7,15 @@ import {
   Param,
   NotFoundException,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 // import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
-import { User } from './user.model';
+import { User } from './entities/user.entity';
 // import { UpdateUserDto } from './dto/update-user.dto';
+
+import { AuthGuard } from './auth.guard'; // Import your custom guard
 
 @Controller('users')
 export class UsersController {
@@ -23,11 +26,12 @@ export class UsersController {
     schema: {
       type: 'object',
       properties: {
-        firstName: { type: 'string', default: 'majid' },
+        username: { type: 'string', default: 'majid' },
         password: { type: 'string', default: '123' },
       },
     },
   })
+  @UseGuards(AuthGuard)
   async login(
     @Body() loginData: { username: string; password: string },
   ): Promise<User> {
