@@ -10,8 +10,7 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const { username, password } = request.body;
-    const isAuthenticated = this.usersService.validateUser(username, password);
-    return isAuthenticated;
+    const isAuthenticated = this.usersService.findOne(request.body);
+    return !!isAuthenticated;
   }
 }

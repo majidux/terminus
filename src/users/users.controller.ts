@@ -6,14 +6,13 @@ import {
   Patch,
   Param,
   NotFoundException,
-  UnauthorizedException,
   UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
-// import { User } from './entities/user.entity';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 import { AuthGuard } from './auth.guard'; // Import your custom guard
 import { handleDecodeHashString, handleHashString } from '../utils';
@@ -32,32 +31,45 @@ export class UsersController {
       },
     },
   })
-  async login(@Body() loginData: CreateUserDto): Promise<string> {
-    const hashPass = handleDecodeHashString(loginData?.password);
-    const user: CreateUserDto = await this.usersService.findOne({
-      username: loginData.username,
-      password: hashPass,
+  async login(@Body() updateUserDto: UpdateUserDto): Promise<string> {
+    const user: UpdateUserDto = await this.usersService.findOne({
+      username: updateUserDto?.username,
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('کاربری با این مشخصات وجود ندارد');
     }
 
-    if (user.password !== loginData?.password) {
-      throw new UnauthorizedException('Invalid credentials');
+    const decodedHashPass: boolean = await handleDecodeHashString(
+      user?.password,
+      updateUserDto?.password,
+    );
+
+    if (!decodedHashPass) {
+      throw new UnauthorizedException('اطلاعات نادرست');
     }
 
-    return 'Logged in';
+    return 'وارد شدید';
   }
 
   @Post('/auth/register')
-  create(@Body() loginData: CreateUserDto) {
-    const hashPass = handleHashString(loginData?.password);
-    this.usersService.create({
-      username: loginData.username,
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        username: { type: 'string', default: 'majid' },
+        password: { type: 'string', default: '123' },
+        email: { type: 'string', default: 'majiddarvish93@gmail.com' },
+      },
+    },
+  })
+  async create(@Body() createUserDto: CreateUserDto) {
+    const hashPass = await handleHashString(createUserDto?.password);
+    this.usersService.save({
+      ...createUserDto,
       password: hashPass,
     });
-    return 'created';
+    return 'اکانت جدید ساخته شد';
   }
 
   @Get('allUsers')

@@ -1,36 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
-    // @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  // constructor(
-  //   @InjectModel(User.name) private readonly userModel: Model<User>,
-  // ) {}
-
-  create(createUserDto: CreateUserDto) {
-    return this.userModel.insertMany({
+  save(createUserDto: CreateUserDto) {
+    return this.userRepository.save({
       ...createUserDto,
     });
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.userRepository.find();
   }
 
-  findOne(createUserDto: CreateUserDto) {
-    return this.userModel.findOne({
-      ...createUserDto,
+  findOne(updateUserDto: UpdateUserDto): Promise<UpdateUserDto> {
+    return this.userRepository.findOne({
+      where: {
+        ...updateUserDto,
+      },
     });
   }
 
@@ -43,9 +38,5 @@ export class UsersService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
-  }
-
-  async validateUser(username: string, password: string): Promise<boolean> {
-    return !!this.userModel.findOne({ username, password });
   }
 }
