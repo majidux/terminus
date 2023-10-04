@@ -10,12 +10,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-// import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
+// import { User } from './entities/user.entity';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
 import { AuthGuard } from './auth.guard'; // Import your custom guard
+import { handleDecodeHashString, handleHashString } from '../utils';
 
 @Controller('users')
 export class UsersController {
@@ -31,25 +32,36 @@ export class UsersController {
       },
     },
   })
-  @UseGuards(AuthGuard)
-  async login(
-    @Body() loginData: { username: string; password: string },
-  ): Promise<User> {
-    const { username, password } = loginData;
-    const user: any = await this.usersService.findOne(username);
+  async login(@Body() loginData: CreateUserDto): Promise<string> {
+    const hashPass = handleDecodeHashString(loginData?.password);
+    const user: CreateUserDto = await this.usersService.findOne({
+      username: loginData.username,
+      password: hashPass,
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    if (user.password !== password) {
+    if (user.password !== loginData?.password) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    return user;
+    return 'Logged in';
   }
 
-  @Get()
+  @Post('/auth/register')
+  create(@Body() loginData: CreateUserDto) {
+    const hashPass = handleHashString(loginData?.password);
+    this.usersService.create({
+      username: loginData.username,
+      password: hashPass,
+    });
+    return 'created';
+  }
+
+  @Get('allUsers')
+  @UseGuards(AuthGuard)
   findAll() {
     return this.usersService.findAll();
   }
