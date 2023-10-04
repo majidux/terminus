@@ -14,7 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-import { AuthGuard } from './auth.guard'; // Import your custom guard
+import { AuthGuard } from './auth.guard';
 import { handleDecodeHashString, handleHashString } from '../utils';
 
 @Controller('users')
