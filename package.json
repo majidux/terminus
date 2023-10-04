@@ -29,11 +29,13 @@
     "@nestjs/mongoose": "^10.0.1",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-fastify": "^10.2.6",
+    "@nestjs/typeorm": "^10.0.0",
     "@swc/cli": "^0.1.62",
     "@swc/core": "^1.3.89",
     "mongoose": "^7.5.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
