@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  terminusapp:
+    container_name: terminus_container
+    image: terminus_image:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    #    environment:
+    #        - DB_TYPE=postgres
+    #        - PG_HOST=localhost
+    #        - PG_USER=terminus_user
+    #        - PG_PASSWORD=majid12345
+    #        - PG_DB=terminus_db
+    #        - PG_PORT=5432
+    #        - DATABASE_URL=postgres://postgres:majid1993@postgres:5432/terminus_db
+    #        - NODE_ENV=development
+    #        - PORT=3000
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: postgres:latest
+    ports:
+      - 35000:5432
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata: {}
