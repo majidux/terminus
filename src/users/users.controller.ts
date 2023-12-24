@@ -65,7 +65,7 @@ export class UsersController {
   })
   async create(@Body() createUserDto: CreateUserDto) {
     const hashPass = await handleHashString(createUserDto?.password);
-    this.usersService.save({
+    await this.usersService.save({
       ...createUserDto,
       password: hashPass,
     });
