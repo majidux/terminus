@@ -9,6 +9,9 @@ import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+    }),
     // MongooseModule.forRoot(constants.dataBaseConnectionString),
     TypeOrmModule.forRoot({
       // type: 'postgres',
@@ -27,7 +30,6 @@ import { User } from './users/entities/user.entity';
       entities: [User],
       autoLoadEntities: true,
     }),
-    ConfigModule.forRoot(),
     UsersModule,
   ],
 })
