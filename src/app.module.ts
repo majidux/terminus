@@ -3,14 +3,21 @@ import { UsersModule } from './users/users.module';
 // import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { constants } from './constant';
-// import { ConnectOptions } from 'typeorm';
-// import { User } from './users/entities/user.entity';
+import { JwtModule } from '@nestjs/jwt';
+import { constants } from './constant';
+
+// import { ConnectOptions } from 'typeorm';\
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env'],
+      isGlobal: true,
+    }),
+    JwtModule.register({
+      global: true,
+      secret: constants.jwtSecret,
+      signOptions: { expiresIn: `${60 * 60 * 24}` + 's' },
     }),
     // MongooseModule.forRoot(constants.dataBaseConnectionString),
     TypeOrmModule.forRoot({
