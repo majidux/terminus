@@ -12,7 +12,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { FindOneUserDto, UpdateUserDto } from './dto/update-user.dto';
 
 import { AuthGuard } from './auth.guard';
 import { handleDecodeHashString, handleHashString } from '../utils';
@@ -31,9 +31,11 @@ export class UsersController {
       },
     },
   })
-  async login(@Body() updateUserDto: UpdateUserDto): Promise<string> {
-    const user: UpdateUserDto = await this.usersService.findOne({
-      username: updateUserDto?.username,
+  async login(
+    @Body() userDto: UpdateUserDto,
+  ): Promise<{ access_token: string }> {
+    const user: FindOneUserDto = await this.usersService.findOne({
+      username: userDto?.username,
     });
 
     if (!user) {
@@ -42,14 +44,13 @@ export class UsersController {
 
     const decodedHashPass: boolean = await handleDecodeHashString(
       user?.password,
-      updateUserDto?.password,
+      userDto?.password,
     );
 
     if (!decodedHashPass) {
-      throw new UnauthorizedException('اطلاعات نادرست');
+      throw new UnauthorizedException('رمز عبور نادرست است');
     }
-
-    return 'وارد شدید';
+    return await this.usersService.signIn(user);
   }
 
   @Post('/auth/register')
