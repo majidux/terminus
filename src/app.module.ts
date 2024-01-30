@@ -4,7 +4,6 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { constants } from './constant';
 
 // import { ConnectOptions } from 'typeorm';\
 
@@ -13,10 +12,11 @@ import { constants } from './constant';
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       isGlobal: true,
+      cache: true,
     }),
     JwtModule.register({
       global: true,
-      secret: constants.jwtSecret,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: `${60 * 60 * 24}` + 's' },
     }),
     // MongooseModule.forRoot(constants.dataBaseConnectionString),

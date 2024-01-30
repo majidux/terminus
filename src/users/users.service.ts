@@ -46,6 +46,7 @@ export class UsersService {
     const payload = { username: updateUserDto.username };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      message: 'ورود موفق',
     };
   }
 }

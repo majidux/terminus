@@ -8,6 +8,7 @@ import {
   NotFoundException,
   UseGuards,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -64,8 +65,15 @@ export class UsersController {
       },
     },
   })
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto): Promise<string> {
     const hashPass = await handleHashString(createUserDto?.password);
+    const user: FindOneUserDto = await this.usersService.findOne({
+      username: createUserDto?.username,
+    });
+
+    if (user) {
+      throw new ForbiddenException('نام کاربری تکراری است');
+    }
     await this.usersService.save({
       ...createUserDto,
       password: hashPass,
