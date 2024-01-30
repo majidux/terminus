@@ -5,14 +5,17 @@ import {
   UpdateDateColumn,
   Index,
   PrimaryGeneratedColumn,
+  ManyToMany,
 } from 'typeorm';
+import { Group } from '../../group/entities/group.entity';
 
 @Entity()
 export class User {
+  @Index()
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', unique: true })
   username: string;
 
   @Column({ nullable: true })
@@ -24,9 +27,11 @@ export class User {
   @Column()
   password: string;
 
-  @Index()
   @Column({ type: 'varchar', nullable: true, unique: true })
   email: string;
+
+  @ManyToMany(() => Group)
+  groups: Group[];
 
   @Column(() => Date)
   @CreateDateColumn({ type: 'date' })

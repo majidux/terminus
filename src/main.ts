@@ -20,6 +20,10 @@ async function bootstrap() {
     .setTitle('Terminus')
     .setDescription('The terminus crm API description')
     .setVersion('1.0')
+    .addBearerAuth({
+      type: 'http',
+      in: 'header',
+    })
     .addTag('terminus api')
     .build();
   const document = SwaggerModule.createDocument(app, config);

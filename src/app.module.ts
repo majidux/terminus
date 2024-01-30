@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
 // import { ConnectOptions } from 'typeorm';\
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { JwtModule } from '@nestjs/jwt';
       autoLoadEntities: true,
     }),
     UsersModule,
+    GroupModule,
   ],
 })
 export class AppModule {

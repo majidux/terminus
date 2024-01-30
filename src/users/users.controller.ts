@@ -62,6 +62,8 @@ export class UsersController {
         username: { type: 'string', default: 'majid' },
         password: { type: 'string', default: '123' },
         email: { type: 'string', default: 'majiddarvish93@gmail.com' },
+        firstName: { type: 'string', default: 'مجید' },
+        lastName: { type: 'string', default: 'درویش نژاد' },
       },
     },
   })
