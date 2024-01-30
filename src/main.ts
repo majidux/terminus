@@ -20,9 +20,10 @@ async function bootstrap() {
     .setTitle('Terminus')
     .setDescription('The terminus crm API description')
     .setVersion('1.0')
-    .addBearerAuth({
+    .addSecurityRequirements('JWT')
+    .addSecurity('JWT', {
       type: 'http',
-      in: 'header',
+      scheme: 'Bearer',
     })
     .addTag('terminus api')
     .build();
