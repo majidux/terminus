@@ -4,19 +4,22 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { constants } from './constant';
+import { APP_GUARD } from '@nestjs/core';
 
 // import { ConnectOptions } from 'typeorm';\
+import { GroupModule } from './group/group.module';
+import { AuthGuard } from './users/auth.guard';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       isGlobal: true,
+      cache: true,
     }),
     JwtModule.register({
       global: true,
-      secret: constants.jwtSecret,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: `${60 * 60 * 24}` + 's' },
     }),
     // MongooseModule.forRoot(constants.dataBaseConnectionString),
@@ -32,6 +35,13 @@ import { constants } from './constant';
       autoLoadEntities: true,
     }),
     UsersModule,
+    GroupModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {

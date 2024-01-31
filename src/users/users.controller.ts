@@ -8,19 +8,21 @@ import {
   NotFoundException,
   UseGuards,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
 import { FindOneUserDto, UpdateUserDto } from './dto/update-user.dto';
 
-import { AuthGuard } from './auth.guard';
+import { UsePublic } from './auth.guard';
 import { handleDecodeHashString, handleHashString } from '../utils';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UsePublic()
   @Post('/auth/login')
   @ApiBody({
     schema: {
@@ -53,6 +55,7 @@ export class UsersController {
     return await this.usersService.signIn(user);
   }
 
+  @UsePublic()
   @Post('/auth/register')
   @ApiBody({
     schema: {
@@ -61,11 +64,20 @@ export class UsersController {
         username: { type: 'string', default: 'majid' },
         password: { type: 'string', default: '123' },
         email: { type: 'string', default: 'majiddarvish93@gmail.com' },
+        firstName: { type: 'string', default: 'مجید' },
+        lastName: { type: 'string', default: 'درویش نژاد' },
       },
     },
   })
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto): Promise<string> {
     const hashPass = await handleHashString(createUserDto?.password);
+    const user: FindOneUserDto = await this.usersService.findOne({
+      username: createUserDto?.username,
+    });
+
+    if (user) {
+      throw new ForbiddenException('نام کاربری تکراری است');
+    }
     await this.usersService.save({
       ...createUserDto,
       password: hashPass,
@@ -74,7 +86,6 @@ export class UsersController {
   }
 
   @Get('allUsers')
-  @UseGuards(AuthGuard)
   findAll() {
     return this.usersService.findAll();
   }
