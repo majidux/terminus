@@ -29,7 +29,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
   app.useGlobalPipes(new ValidationPipe());
   const configModule = app.get(ConfigService);
   app.listen(configModule.get('PORT') || 3000);

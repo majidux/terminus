@@ -15,13 +15,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
 import { FindOneUserDto, UpdateUserDto } from './dto/update-user.dto';
 
-import { AuthGuard } from './auth.guard';
+import { UsePublic } from './auth.guard';
 import { handleDecodeHashString, handleHashString } from '../utils';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UsePublic()
   @Post('/auth/login')
   @ApiBody({
     schema: {
@@ -54,6 +55,7 @@ export class UsersController {
     return await this.usersService.signIn(user);
   }
 
+  @UsePublic()
   @Post('/auth/register')
   @ApiBody({
     schema: {
@@ -84,7 +86,6 @@ export class UsersController {
   }
 
   @Get('allUsers')
-  @UseGuards(AuthGuard)
   findAll() {
     return this.usersService.findAll();
   }

@@ -4,9 +4,11 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
 
 // import { ConnectOptions } from 'typeorm';\
 import { GroupModule } from './group/group.module';
+import { AuthGuard } from './users/auth.guard';
 
 @Module({
   imports: [
@@ -34,6 +36,12 @@ import { GroupModule } from './group/group.module';
     }),
     UsersModule,
     GroupModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {
