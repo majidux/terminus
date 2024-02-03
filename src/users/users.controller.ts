@@ -6,14 +6,17 @@ import {
   Patch,
   Param,
   NotFoundException,
-  UseGuards,
   UnauthorizedException,
   ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody } from '@nestjs/swagger';
-import { FindOneUserDto, UpdateUserDto } from './dto/update-user.dto';
+import {
+  FindOneUserDto,
+  SignUserDto,
+  UpdateUserDto,
+} from './dto/update-user.dto';
 
 import { UsePublic } from './auth.guard';
 import { handleDecodeHashString, handleHashString } from '../utils';
@@ -36,10 +39,9 @@ export class UsersController {
   async login(
     @Body() userDto: UpdateUserDto,
   ): Promise<{ access_token: string }> {
-    const user: FindOneUserDto = await this.usersService.findOne({
+    const user: SignUserDto = await this.usersService.findOne({
       username: userDto?.username,
     });
-
     if (!user) {
       throw new NotFoundException('کاربری با این مشخصات وجود ندارد');
     }

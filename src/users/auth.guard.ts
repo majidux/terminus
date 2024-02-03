@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(
     context: ExecutionContext,
+    // @ts-ignore
   ): boolean | Promise<boolean> | Observable<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),

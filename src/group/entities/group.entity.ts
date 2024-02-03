@@ -1,24 +1,36 @@
+import { User } from '../../users/entities/user.entity';
 import {
   Column,
   Entity,
-  ManyToMany,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Relation,
+  TableForeignKey,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 
-// @ManyToMany()
 @Entity()
 export class Group {
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
-  name: string;
+  groupName: string;
 
-  @ManyToOne(() => User)
-  userOwnerId: string;
+  @ManyToOne(() => User, (group) => group.id)
+  @JoinColumn()
+  ownerUser: Relation<User>;
+}
 
-  @ManyToMany(() => User)
-  members: User[];
+@Entity()
+export class GroupMember {
+  @PrimaryGeneratedColumn('uuid')
+  id: number;
+
+  @Column()
+  memberName: string;
+
+  @ManyToOne(() => Group, (group) => group.id)
+  @JoinColumn()
+  ownerGroup: Relation<Group>;
 }
