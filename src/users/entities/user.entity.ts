@@ -11,7 +11,7 @@ import {
 export class User {
   @Index()
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ type: 'varchar', unique: true })
   username: string;

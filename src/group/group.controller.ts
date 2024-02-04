@@ -1,11 +1,20 @@
-import { Controller, Post, Body, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Req,
+  BadRequestException,
+  Put,
+} from '@nestjs/common';
 import { GroupService } from './group.service';
 import {
   CreateAddUserToGroupDto,
   CreateGroupDto,
 } from './dto/create-group.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { UpdateGroupDto } from './dto/update-group.dto';
 
+@ApiTags('Group')
 @Controller('group')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
@@ -20,11 +29,15 @@ export class GroupController {
   })
   @Post('createGroup')
   createGroup(@Body() createGroupDto: CreateGroupDto, @Req() request: any) {
-    const payload: CreateGroupDto = {
-      groupName: createGroupDto.groupName,
-      ownerUser: request.user.id,
-    };
-    return this.groupService.save(payload);
+    try {
+      const payload: CreateGroupDto = {
+        groupName: createGroupDto.groupName,
+        ownerUser: request.user.id,
+      };
+      return this.groupService.save(payload);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @ApiBody({
@@ -34,21 +47,48 @@ export class GroupController {
         memberName: { type: 'string', default: 'عضو یک' },
         ownerGroup: {
           type: 'string',
-          default: 'aa47f18b-144e-46cc-a71a-5a9a22cea5ba',
+          default: 'ce1f5d08-aef0-4815-a66f-79d3ea1c726e',
         },
       },
     },
   })
-  @Post('addUserToGroup')
-  async addUserToGroup(@Body() createMemberGroupDto: any) {
-    // const group = await this.groupService.findOneGroup(
-    //   createMemberGroupDto.ownerGroup,
-    // );
-    console.log(createMemberGroupDto);
-    const payload: CreateAddUserToGroupDto = {
-      memberName: createMemberGroupDto.memberName,
-      ownerGroup: createMemberGroupDto.ownerGroup,
-    };
-    return this.groupService.saveUserToGroup(payload);
+  @Post('newMember')
+  async addUserToGroup(@Body() createMemberGroupDto: CreateAddUserToGroupDto) {
+    try {
+      const payload: CreateAddUserToGroupDto = {
+        memberName: createMemberGroupDto.memberName,
+        ownerGroup: createMemberGroupDto.ownerGroup,
+      };
+      return this.groupService.saveMemberToGroup(payload);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', default: '782726a7-9ae3-4226-af7c-c66c965ca23a' },
+        groupBill: {
+          type: 'number',
+          default: 5000,
+        },
+        groupCashDesk: {
+          type: 'number',
+          default: 0,
+        },
+        groupExpense: {
+          type: 'number',
+          default: 0,
+        },
+      },
+    },
+  })
+  @Put('groupBill')
+  async groupBill(@Body() updateGroupDto: UpdateGroupDto) {
+    try {
+      return this.groupService.updateGroupBill(updateGroupDto);
+    } catch (error) {}
   }
 }

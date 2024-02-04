@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   FindOneUserDto,
   SignUserDto,
@@ -21,6 +21,7 @@ import {
 import { UsePublic } from './auth.guard';
 import { handleDecodeHashString, handleHashString } from '../utils';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -39,22 +40,26 @@ export class UsersController {
   async login(
     @Body() userDto: UpdateUserDto,
   ): Promise<{ access_token: string }> {
-    const user: SignUserDto = await this.usersService.findOne({
-      username: userDto?.username,
-    });
-    if (!user) {
-      throw new NotFoundException('کاربری با این مشخصات وجود ندارد');
-    }
+    try {
+      const user: SignUserDto = await this.usersService.findOne({
+        username: userDto?.username,
+      });
+      if (!user) {
+        throw new NotFoundException('کاربری با این مشخصات وجود ندارد');
+      }
 
-    const decodedHashPass: boolean = await handleDecodeHashString(
-      user?.password,
-      userDto?.password,
-    );
+      const decodedHashPass: boolean = await handleDecodeHashString(
+        user?.password,
+        userDto?.password,
+      );
 
-    if (!decodedHashPass) {
-      throw new UnauthorizedException('رمز عبور نادرست است');
+      if (!decodedHashPass) {
+        throw new UnauthorizedException('رمز عبور نادرست است');
+      }
+      return await this.usersService.signIn(user);
+    } catch (e) {
+      throw new NotFoundException(e.message);
     }
-    return await this.usersService.signIn(user);
   }
 
   @UsePublic()
