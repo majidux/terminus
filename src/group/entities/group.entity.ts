@@ -1,24 +1,53 @@
+import { User } from '../../users/entities/user.entity';
 import {
   Column,
   Entity,
-  ManyToMany,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Relation,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 
-// @ManyToMany()
 @Entity()
 export class Group {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
-  name: string;
+  groupName: string;
 
-  @ManyToOne(() => User)
-  userOwnerId: string;
+  @Column({ type: 'float', default: 0 })
+  groupBill: string;
 
-  @ManyToMany(() => User)
-  members: User[];
+  @Column({ type: 'float', default: 0 })
+  groupCashDesk: string;
+
+  @Column({ type: 'float', default: 0 })
+  groupExpense: string;
+
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn()
+  ownerUser: Relation<User>;
+}
+
+@Entity()
+export class GroupMember {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  memberName: string;
+
+  @Column({ type: 'float', default: 0 })
+  memberCashDesk: string;
+
+  @Column({ type: 'float', default: 0 })
+  memberExpense: string;
+
+  @Column({ type: 'float', default: 0 })
+  memberBill: string;
+
+  @ManyToOne(() => Group, (group) => group.id)
+  @JoinColumn()
+  ownerGroup: Relation<Group>;
 }

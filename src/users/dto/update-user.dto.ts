@@ -14,3 +14,9 @@ export class FindOneUserDto extends PartialType(CreateUserDto) {
   @IsNotEmpty({ message: 'نام کاربری خالی نمیتواند خالی باشد' })
   readonly username: string;
 }
+
+export class SignUserDto extends PartialType(CreateUserDto) {
+  @IsNotEmpty({ message: 'نام کاربری خالی نمیتواند خالی باشد' })
+  readonly username: string;
+  readonly id?: string;
+}

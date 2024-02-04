@@ -6,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { UsersService } from './users.service';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
@@ -17,11 +16,12 @@ export const UsePublic = () => SetMetadata(IS_PUBLIC_KEY, true);
 export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private jwtService: JwtService, // private readonly usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
   async canActivate(
     context: ExecutionContext,
+    // @ts-ignore
   ): boolean | Promise<boolean> | Observable<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),

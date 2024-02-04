@@ -5,15 +5,13 @@ import {
   UpdateDateColumn,
   Index,
   PrimaryGeneratedColumn,
-  ManyToMany,
 } from 'typeorm';
-import { Group } from '../../group/entities/group.entity';
 
 @Entity()
 export class User {
   @Index()
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ type: 'varchar', unique: true })
   username: string;
@@ -29,9 +27,6 @@ export class User {
 
   @Column({ type: 'varchar', nullable: true, unique: true })
   email: string;
-
-  @ManyToMany(() => Group)
-  groups: Group[];
 
   @Column(() => Date)
   @CreateDateColumn({ type: 'date' })

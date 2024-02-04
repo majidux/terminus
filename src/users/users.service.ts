@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FindOneUserDto, UpdateUserDto } from './dto/update-user.dto';
+import {
+  FindOneUserDto,
+  SignUserDto,
+  UpdateUserDto,
+} from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -42,8 +46,8 @@ export class UsersService {
     return `This action removes a #${id} user`;
   }
 
-  async signIn(updateUserDto: FindOneUserDto) {
-    const payload = { username: updateUserDto.username };
+  async signIn(updateUserDto: SignUserDto) {
+    const payload = { username: updateUserDto.username, id: updateUserDto.id };
     return {
       access_token: await this.jwtService.signAsync(payload),
       message: 'ورود موفق',

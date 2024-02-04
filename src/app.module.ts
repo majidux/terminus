@@ -1,14 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
-// import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
-
-// import { ConnectOptions } from 'typeorm';\
-import { GroupModule } from './group/group.module';
 import { AuthGuard } from './users/auth.guard';
+import { UsersModule } from './users/users.module';
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -22,7 +19,6 @@ import { AuthGuard } from './users/auth.guard';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: `${60 * 60 * 24}` + 's' },
     }),
-    // MongooseModule.forRoot(constants.dataBaseConnectionString),
     TypeOrmModule.forRoot({
       type: process.env.DB_TYPE as any,
       host: process.env.PG_HOST,
