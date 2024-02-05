@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
-    { bodyParser: true },
+    { bodyParser: true, snapshot: true },
   );
 
   app.setGlobalPrefix('api/v1');

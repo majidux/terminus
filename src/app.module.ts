@@ -6,9 +6,13 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './users/auth.guard';
 import { UsersModule } from './users/users.module';
 import { GroupModule } from './group/group.module';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 @Module({
   imports: [
+    DevtoolsModule.register({
+      http: true,
+    }),
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       isGlobal: true,

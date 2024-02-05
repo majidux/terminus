@@ -1,4 +1,4 @@
-import argon2 from 'argon2';
+const argon2 = require('argon2');
 
 export async function handleHashString(password: string): Promise<string> {
   try {
@@ -13,7 +13,7 @@ export async function handleDecodeHashString(
   password: string,
 ): Promise<boolean> {
   try {
-    return await argon2.verify(hashedPassword, password);
+    return await argon2?.verify(hashedPassword, password);
   } catch (err) {
     throw new Error(err);
   }
