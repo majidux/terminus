@@ -4,7 +4,6 @@ import {
   Body,
   Req,
   BadRequestException,
-  Put,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import {
@@ -12,7 +11,6 @@ import {
   CreateGroupDto,
 } from './dto/create-group.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { UpdateGroupDto } from './dto/update-group.dto';
 
 @ApiTags('Group')
 @Controller('group')
@@ -63,32 +61,5 @@ export class GroupController {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
-  }
-
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        id: { type: 'string', default: '782726a7-9ae3-4226-af7c-c66c965ca23a' },
-        groupBill: {
-          type: 'number',
-          default: 5000,
-        },
-        groupCashDesk: {
-          type: 'number',
-          default: 0,
-        },
-        groupExpense: {
-          type: 'number',
-          default: 0,
-        },
-      },
-    },
-  })
-  @Put('groupBill')
-  async groupBill(@Body() updateGroupDto: UpdateGroupDto) {
-    try {
-      return this.groupService.updateGroupBill(updateGroupDto);
-    } catch (error) {}
   }
 }

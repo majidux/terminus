@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
-import { GroupMember, Group } from '../entities/group.entity';
+import { Group } from '../entities/group.entity';
+import { GroupMember } from '../entities/group-member.entity';
 
 export class CreateGroupDto {
   @IsNotEmpty({ message: 'نام گروه خالی نمیتواند خالی باشد' })
