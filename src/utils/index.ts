@@ -1,20 +1,27 @@
-const argon2 = require('argon2');
+import crypto from 'crypto';
 
-export async function handleHashString(password: string): Promise<string> {
+export function handleHashString(password: string): string {
   try {
-    return await argon2.hash(password);
-  } catch (err) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    return crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    // return await crypto.createHmac('aes-128-cbc',password);
+  } catch(err) {
     throw new Error(err);
   }
 }
 
-export async function handleDecodeHashString(
+export function handleDecodeHashString(
   hashedPassword: string,
   password: string,
-): Promise<boolean> {
+): boolean {
   try {
-    return await argon2?.verify(hashedPassword, password);
-  } catch (err) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const newHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+
+    return newHash === hashedPassword;
+    // return crypto.verify(hashedPassword,'sha256');
+    // return await argon2?.verify(hashedPassword, password);
+  } catch(err) {
     throw new Error(err);
   }
 }
