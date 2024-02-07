@@ -6,17 +6,18 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './users/auth.guard';
 import { UsersModule } from './users/users.module';
 import { GroupModule } from './group/group.module';
+import { GroupAccountModule } from './group-account/group-account.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 @Module({
   imports: [
-    DevtoolsModule.register({
-      http: true,
-    }),
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       isGlobal: true,
       cache: true,
+    }),
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV === 'development',
     }),
     JwtModule.register({
       global: true,
@@ -30,12 +31,13 @@ import { DevtoolsModule } from '@nestjs/devtools-integration';
       username: process.env.PG_USER?.toString(),
       password: process.env.PG_PASSWORD?.toString(),
       database: process.env.PG_DB,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [__dirname + '/**/*.entity.{ts,js}'],
       synchronize: true,
       autoLoadEntities: true,
     }),
     UsersModule,
     GroupModule,
+    GroupAccountModule,
   ],
   providers: [
     {
