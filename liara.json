@@ -1,0 +1,5 @@
+{
+  "platform": "node",
+  "app": "trmns-app",
+  "port": 3500
+}
