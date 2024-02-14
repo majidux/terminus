@@ -14,7 +14,10 @@ async function bootstrap() {
     new FastifyAdapter(),
     { bodyParser: true, snapshot: true },
   );
-
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  });
   app.setGlobalPrefix('api/v1');
   const config = new DocumentBuilder()
     .setTitle('Terminus')
@@ -31,7 +34,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(new ValidationPipe());
   const configModule = app.get(ConfigService);
-  app.listen(configModule.get('PORT') || 3000);
+  await app.listen(configModule.get('PORT') || 3500, '0.0.0.0');
 }
 
-bootstrap();
+bootstrap().then(() => {});
