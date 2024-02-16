@@ -1,4 +1,6 @@
-import argon2 from 'argon2';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const argon2 = require('argon2');
+// import argon2 from 'argon2';
 
 export async function handleHashString(password: string): Promise<string> {
   try {

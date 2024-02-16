@@ -97,6 +97,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @UsePublic()
   @Patch(':id')
   update(
     @Param('id') id: string,
