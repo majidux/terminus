@@ -39,12 +39,13 @@ import typeorm from './constant/typeorm';
       password: process.env.PG_PASSWORD?.toString(),
       database: process.env.PG_DB,
       entities: [__dirname + '/**/*.entity.{ts,js}'],
-      synchronize: process.env.NODE_ENV === 'development',
+      // synchronize: process.env.NODE_ENV === 'development',
+      synchronize: true,
       autoLoadEntities: true,
     }),
-    GroupAccountModule,
     UsersModule,
     GroupModule,
+    GroupAccountModule,
   ],
   providers: [
     {
