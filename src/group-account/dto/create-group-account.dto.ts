@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
 import { Group } from '../../group/entities/group.entity';
 
 export class CreateGroupAccountDto {
@@ -7,6 +7,7 @@ export class CreateGroupAccountDto {
   readonly groupBill: string;
   readonly groupCashDesk: string;
   readonly groupExpense: string;
+  @IsOptional()
   @IsUUID('all', { message: 'آی دی گروه باید یک UUID باشد' })
   readonly id: string;
 }
