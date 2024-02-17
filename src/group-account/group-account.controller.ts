@@ -16,6 +16,10 @@ export class GroupAccountController {
           type: 'string',
           default: 'ea9314fe-738e-40db-8a27-98fc7c9c2f5e',
         },
+        id: {
+          type: 'string',
+          default: 'ee931c29-7efd-4fd4-85a8-085567f5502e',
+        },
         groupBill: {
           type: 'number',
           default: 5000,
