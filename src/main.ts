@@ -16,10 +16,10 @@ async function bootstrap() {
     }),
     { bodyParser: true, snapshot: true },
   );
-  // app.enableCors({
-  //   origin: '*',
-  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  // });
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  });
   app.setGlobalPrefix('api/v1');
   const config = new DocumentBuilder()
     .setTitle('Terminus')
@@ -39,6 +39,4 @@ async function bootstrap() {
   await app.listen(configModule.get('PORT') || 3500, '0.0.0.0');
 }
 
-bootstrap()
-  .then((success) => console.log('success', success))
-  .catch((error) => console.log('error', error));
+bootstrap();
