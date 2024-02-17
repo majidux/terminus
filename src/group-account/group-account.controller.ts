@@ -14,7 +14,7 @@ export class GroupAccountController {
       properties: {
         groupId: {
           type: 'string',
-          default: 'ce1f5d08-aef0-4815-a66f-79d3ea1c726e',
+          default: 'ea9314fe-738e-40db-8a27-98fc7c9c2f5e',
         },
         groupBill: {
           type: 'number',

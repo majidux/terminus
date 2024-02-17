@@ -1,10 +1,7 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
   NotFoundException,
   UnauthorizedException,
   ForbiddenException,
@@ -90,19 +87,5 @@ export class UsersController {
       password: hashPass,
     });
     return 'اکانت جدید ساخته شد';
-  }
-
-  @Get('allUsers')
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @UsePublic()
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    //  @Body() updateUserDto: UpdateUserDto
-  ) {
-    return this.usersService.update(+id);
   }
 }

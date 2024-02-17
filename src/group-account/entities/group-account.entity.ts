@@ -1,5 +1,6 @@
 import {
   Column,
+  Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -7,6 +8,7 @@ import {
 } from 'typeorm';
 import { Group } from '../../group/entities/group.entity';
 
+@Entity()
 export class GroupAccount {
   @PrimaryGeneratedColumn('uuid')
   id: string;
