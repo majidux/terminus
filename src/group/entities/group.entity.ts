@@ -1,11 +1,13 @@
 import { User } from '../../users/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -19,4 +21,12 @@ export class Group {
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn()
   ownerUser: Relation<User>;
+
+  @Column(() => Date)
+  @CreateDateColumn({ type: 'date' })
+  createdAt: Date;
+
+  @Column(() => Date)
+  @UpdateDateColumn({ type: 'date' })
+  updatedAt: Date;
 }

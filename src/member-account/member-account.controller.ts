@@ -1,7 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { MemberAccountService } from './member-account.service';
 import { CreateMemberAccountDto } from './dto/create-member-account.dto';
 import { ApiBody } from '@nestjs/swagger';
+import { handleResponse } from '../utils';
 
 @Controller('member-account')
 export class MemberAccountController {
@@ -11,23 +12,24 @@ export class MemberAccountController {
     schema: {
       type: 'object',
       properties: {
-        groupId: {
+        ownerGroup: {
           type: 'string',
-          default: 'ea9314fe-738e-40db-8a27-98fc7c9c2f5e',
+          default: '2293adaa-461d-4097-8ee0-2b2ae1da2a3b',
         },
-        id: {
+        ownerMember: {
           type: 'string',
-          default: 'ee931c29-7efd-4fd4-85a8-085567f5502e',
-        },
-        memberId: {
-          type: 'number',
-          default: 5000,
+          default: '7b21ffc3-f109-4b75-ac9d-ac4dd6f55080',
         },
       },
     },
   })
-  @Post()
-  create(@Body() createMemberAccountDto: CreateMemberAccountDto) {
-    return this.memberAccountService.create(createMemberAccountDto);
+  @Post('memberExpense')
+  async create(@Body() createMemberAccountDto: CreateMemberAccountDto) {
+    try {
+      await this.memberAccountService.create(createMemberAccountDto);
+      return handleResponse({ message: 'عضو با موفقیت اضافه شد' });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

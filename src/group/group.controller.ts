@@ -11,6 +11,7 @@ import {
   CreateGroupDto,
 } from './dto/create-group.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { handleResponse } from '../utils';
 
 @ApiTags('Group')
 @Controller('group')
@@ -26,13 +27,17 @@ export class GroupController {
     },
   })
   @Post('createGroup')
-  createGroup(@Body() createGroupDto: CreateGroupDto, @Req() request: any) {
+  async createGroup(
+    @Body() createGroupDto: CreateGroupDto,
+    @Req() request: any,
+  ) {
     try {
       const payload: CreateGroupDto = {
         groupName: createGroupDto.groupName,
         ownerUser: request.user.id,
       };
-      return this.groupService.save(payload);
+      await this.groupService.save(payload);
+      return handleResponse({ message: 'گروه با موفقیت اضافه شد' });
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -53,11 +58,8 @@ export class GroupController {
   @Post('newMember')
   async addUserToGroup(@Body() createMemberGroupDto: CreateAddUserToGroupDto) {
     try {
-      const payload: CreateAddUserToGroupDto = {
-        memberName: createMemberGroupDto.memberName,
-        ownerGroup: createMemberGroupDto.ownerGroup,
-      };
-      return this.groupService.saveMemberToGroup(payload);
+      await this.groupService.saveMemberToGroup(createMemberGroupDto);
+      return handleResponse({ message: 'عضو با موفقیت اضافه شد' });
     } catch (error) {
       throw new BadRequestException(error.message);
     }

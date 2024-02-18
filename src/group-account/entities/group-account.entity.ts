@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Group } from '../../group/entities/group.entity';
 
@@ -14,15 +16,23 @@ export class GroupAccount {
   id: string;
 
   @Column({ type: 'float', default: 0 })
-  groupBill: string;
+  bill: string;
 
   @Column({ type: 'float', default: 0 })
-  groupCashDesk: string;
+  cashDesk: string;
 
   @Column({ type: 'float', default: 0 })
-  groupExpense: string;
+  expense: string;
 
   @ManyToOne(() => Group, (group) => group.id)
   @JoinColumn()
   groupId: Relation<Group>;
+
+  @Column(() => Date)
+  @CreateDateColumn({ type: 'date' })
+  createdAt: Date;
+
+  @Column(() => Date)
+  @UpdateDateColumn({ type: 'date' })
+  updatedAt: Date;
 }

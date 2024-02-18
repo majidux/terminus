@@ -28,4 +28,12 @@ export class GroupService {
       ...createAddUserToGroupDto,
     });
   }
+
+  findMemberInGroup(createAddUserToGroupDto: CreateAddUserToGroupDto) {
+    return this.groupMembersRepository.find({
+      where: {
+        ownerGroup: createAddUserToGroupDto.ownerGroup,
+      },
+    });
+  }
 }

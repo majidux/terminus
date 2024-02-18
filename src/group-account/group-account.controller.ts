@@ -35,7 +35,7 @@ export class GroupAccountController {
       },
     },
   })
-  @Post('groupBill')
+  @Post('groupExpense')
   async groupBill(@Body() createGroupAccountDto: CreateGroupAccountDto) {
     try {
       return this.groupAccountService.addNewGroupBill(createGroupAccountDto);
