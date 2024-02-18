@@ -19,18 +19,15 @@ export class MemberAccount {
   @JoinColumn()
   ownerGroup: Relation<Group>;
 
+  @Column()
+  expenseName: string;
+
   @ManyToOne(() => GroupMember, (member) => member.id)
   @JoinColumn()
   ownerMember: Relation<GroupMember>;
 
   @Column({ type: 'float', default: 0 })
-  cashDesk: string;
-
-  @Column({ type: 'float', default: 0 })
-  expense: string;
-
-  @Column({ type: 'float', default: 0 })
-  bill: string;
+  paid: string;
 
   @Column(() => Date)
   @CreateDateColumn({ type: 'date' })

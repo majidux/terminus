@@ -7,6 +7,8 @@ export class CreateGroupAccountDto {
   readonly bill: string;
   readonly cashDesk: string;
   readonly expense: string;
+  @IsNotEmpty({ message: 'نام نمیتواند خالی باشد' })
+  readonly expenseName: string;
   @IsOptional()
   @IsUUID('all', { message: 'آی دی گروه باید یک UUID باشد' })
   readonly id: string;

@@ -18,6 +18,9 @@ export class Group {
   @Column()
   groupName: string;
 
+  @Column({ type: 'boolean', default: false })
+  isDeleted: boolean;
+
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn()
   ownerUser: Relation<User>;

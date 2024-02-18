@@ -15,14 +15,11 @@ export class GroupAccount {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'float', default: 0 })
-  bill: string;
+  @Column()
+  expenseName: string;
 
   @Column({ type: 'float', default: 0 })
-  cashDesk: string;
-
-  @Column({ type: 'float', default: 0 })
-  expense: string;
+  paid: string;
 
   @ManyToOne(() => Group, (group) => group.id)
   @JoinColumn()

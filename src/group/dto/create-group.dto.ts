@@ -1,11 +1,17 @@
 import { IsNotEmpty } from 'class-validator';
 import { Group } from '../entities/group.entity';
-import { GroupMember } from '../entities/group-member.entity';
+import { User } from '../../users/entities/user.entity';
 
 export class CreateGroupDto {
   @IsNotEmpty({ message: 'نام گروه نمیتواند خالی باشد' })
   readonly groupName: string;
-  readonly ownerUser: GroupMember;
+  readonly ownerUser: User;
+}
+
+export class GetGroupDto {
+  // @IsOptional()
+  // readonly groupName: string;
+  readonly ownerUser: User;
 }
 
 export class CreateAddUserToGroupDto {

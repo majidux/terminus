@@ -4,14 +4,18 @@ import {
   Body,
   Req,
   BadRequestException,
+  Delete,
+  Param,
+  Get,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import {
   CreateAddUserToGroupDto,
   CreateGroupDto,
 } from './dto/create-group.dto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiParam } from '@nestjs/swagger';
 import { handleResponse } from '../utils';
+import { UpdateGroupDto } from './dto/update-group.dto';
 
 @ApiTags('Group')
 @Controller('group')
@@ -38,6 +42,40 @@ export class GroupController {
       };
       await this.groupService.save(payload);
       return handleResponse({ message: 'گروه با موفقیت اضافه شد' });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    schema: {
+      type: 'string',
+      default: 'ef2050cd-df9a-4472-9d02-cb2c30587869',
+    },
+  })
+  @Delete('deleteGroup/:id')
+  async deleteGroup(@Param('id') id: string, @Req() request: any) {
+    try {
+      const payload: UpdateGroupDto = {
+        id: id,
+        ownerUser: request.user.id,
+      };
+      await this.groupService.deleteGroup(payload);
+      return handleResponse({ message: 'گروه با موفقیت حذف شد' });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Get('getGroups')
+  async getGroups(@Req() request: any) {
+    try {
+      const groups = await this.groupService.getGroups({
+        ownerUser: request?.user?.id,
+      });
+      return handleResponse({ data: groups });
     } catch (error) {
       throw new BadRequestException(error.message);
     }

@@ -27,7 +27,7 @@ export class MemberAccountController {
   async create(@Body() createMemberAccountDto: CreateMemberAccountDto) {
     try {
       await this.memberAccountService.create(createMemberAccountDto);
-      return handleResponse({ message: 'عضو با موفقیت اضافه شد' });
+      return handleResponse({ message: 'موفقیت اضافه شد' });
     } catch (error) {
       throw new BadRequestException(error.message);
     }
