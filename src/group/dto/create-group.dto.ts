@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { Group } from '../entities/group.entity';
 import { User } from '../../users/entities/user.entity';
 
@@ -9,9 +9,9 @@ export class CreateGroupDto {
 }
 
 export class GetGroupDto {
-  // @IsOptional()
-  // readonly groupName: string;
-  readonly ownerUser: User;
+  @IsOptional()
+  readonly groupName?: string;
+  readonly ownerUserId: string;
 }
 
 export class CreateAddUserToGroupDto {

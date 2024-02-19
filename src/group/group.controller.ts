@@ -52,7 +52,6 @@ export class GroupController {
     type: 'string',
     schema: {
       type: 'string',
-      default: 'ef2050cd-df9a-4472-9d02-cb2c30587869',
     },
   })
   @Delete('deleteGroup/:id')
@@ -73,7 +72,7 @@ export class GroupController {
   async getGroups(@Req() request: any) {
     try {
       const groups = await this.groupService.getGroups({
-        ownerUser: request?.user?.id,
+        ownerUserId: request?.user?.id,
       });
       return handleResponse({ data: groups });
     } catch (error) {
@@ -88,7 +87,6 @@ export class GroupController {
         memberName: { type: 'string', default: 'عضو یک' },
         ownerGroup: {
           type: 'string',
-          default: 'ce1f5d08-aef0-4815-a66f-79d3ea1c726e',
         },
       },
     },

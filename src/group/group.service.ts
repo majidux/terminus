@@ -33,10 +33,9 @@ export class GroupService {
   }
 
   getGroups(getGroupDto: GetGroupDto) {
-    console.log('getGroupDto', getGroupDto);
     return this.groupRepository.find({
-      select: { groupName: true },
-      // where: { ownerUser: '138a4fa6-8730-433d-a93d-a72c2e7e0626' },
+      select: { groupName: true, isDeleted: true },
+      where: { ownerUser: { id: getGroupDto.ownerUserId }, isDeleted: false },
     });
   }
 
