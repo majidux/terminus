@@ -1,9 +1,12 @@
-import { IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 import { Group } from '../../group/entities/group.entity';
+import { GroupMember } from '../../group/entities/group-member.entity';
 
-export class CreateGroupAccountDto {
+export class CreateMemberAccountDto {
   @IsNotEmpty({ message: 'آی دی گروه خالی نمیتواند باشد' })
-  readonly groupId: Group;
+  readonly ownerGroup: Group;
+  @IsNotEmpty({ message: 'آی دی عضو خالی نمیتواند باشد' })
+  readonly ownerMember: GroupMember;
   readonly bill: string;
   readonly cashDesk: string;
   readonly expense: string;

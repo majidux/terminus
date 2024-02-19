@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { GroupModule } from './group/group.module';
 import { GroupAccountModule } from './group-account/group-account.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
+import { MemberAccountModule } from './member-account/member-account.module';
 import typeorm from './constant/typeorm';
 
 @Module({
@@ -39,13 +40,13 @@ import typeorm from './constant/typeorm';
       password: process.env.PG_PASSWORD?.toString(),
       database: process.env.PG_DB,
       entities: [__dirname + '/**/*.entity.{ts,js}'],
-      // synchronize: process.env.NODE_ENV === 'development',
-      synchronize: true,
+      synchronize: process.env.NODE_ENV === 'development',
       autoLoadEntities: true,
     }),
     UsersModule,
     GroupModule,
     GroupAccountModule,
+    MemberAccountModule,
   ],
   providers: [
     {

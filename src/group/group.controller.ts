@@ -4,13 +4,18 @@ import {
   Body,
   Req,
   BadRequestException,
+  Delete,
+  Param,
+  Get,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import {
   CreateAddUserToGroupDto,
   CreateGroupDto,
 } from './dto/create-group.dto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiParam } from '@nestjs/swagger';
+import { handleResponse } from '../utils';
+import { UpdateGroupDto } from './dto/update-group.dto';
 
 @ApiTags('Group')
 @Controller('group')
@@ -26,13 +31,50 @@ export class GroupController {
     },
   })
   @Post('createGroup')
-  createGroup(@Body() createGroupDto: CreateGroupDto, @Req() request: any) {
+  async createGroup(
+    @Body() createGroupDto: CreateGroupDto,
+    @Req() request: any,
+  ) {
     try {
       const payload: CreateGroupDto = {
         groupName: createGroupDto.groupName,
         ownerUser: request.user.id,
       };
-      return this.groupService.save(payload);
+      await this.groupService.save(payload);
+      return handleResponse({ message: 'گروه با موفقیت اضافه شد' });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    schema: {
+      type: 'string',
+    },
+  })
+  @Delete('deleteGroup/:id')
+  async deleteGroup(@Param('id') id: string, @Req() request: any) {
+    try {
+      const payload: UpdateGroupDto = {
+        id: id,
+        ownerUser: request.user.id,
+      };
+      await this.groupService.deleteGroup(payload);
+      return handleResponse({ message: 'گروه با موفقیت حذف شد' });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Get('getGroups')
+  async getGroups(@Req() request: any) {
+    try {
+      const groups = await this.groupService.getGroups({
+        ownerUserId: request?.user?.id,
+      });
+      return handleResponse({ data: groups });
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -45,7 +87,6 @@ export class GroupController {
         memberName: { type: 'string', default: 'عضو یک' },
         ownerGroup: {
           type: 'string',
-          default: 'ce1f5d08-aef0-4815-a66f-79d3ea1c726e',
         },
       },
     },
@@ -53,11 +94,8 @@ export class GroupController {
   @Post('newMember')
   async addUserToGroup(@Body() createMemberGroupDto: CreateAddUserToGroupDto) {
     try {
-      const payload: CreateAddUserToGroupDto = {
-        memberName: createMemberGroupDto.memberName,
-        ownerGroup: createMemberGroupDto.ownerGroup,
-      };
-      return this.groupService.saveMemberToGroup(payload);
+      await this.groupService.saveMemberToGroup(createMemberGroupDto);
+      return handleResponse({ message: 'عضو با موفقیت اضافه شد' });
     } catch (error) {
       throw new BadRequestException(error.message);
     }

@@ -1,10 +1,7 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
   NotFoundException,
   UnauthorizedException,
   ForbiddenException,
@@ -70,9 +67,6 @@ export class UsersController {
       properties: {
         username: { type: 'string', default: 'majid' },
         password: { type: 'string', default: '123' },
-        email: { type: 'string', default: 'majiddarvish93@gmail.com' },
-        firstName: { type: 'string', default: 'مجید' },
-        lastName: { type: 'string', default: 'درویش نژاد' },
       },
     },
   })
@@ -90,19 +84,5 @@ export class UsersController {
       password: hashPass,
     });
     return 'اکانت جدید ساخته شد';
-  }
-
-  @Get('allUsers')
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @UsePublic()
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    //  @Body() updateUserDto: UpdateUserDto
-  ) {
-    return this.usersService.update(+id);
   }
 }

@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const argon2 = require('argon2');
-// import argon2 from 'argon2';
+import argon2 from 'argon2';
 
 export async function handleHashString(password: string): Promise<string> {
   try {
@@ -19,4 +17,18 @@ export async function handleDecodeHashString(
   } catch (err) {
     throw new Error(err);
   }
+}
+
+type ResponseType = { status?: number; message?: string; data?: any };
+
+export function handleResponse({
+  status,
+  message,
+  data,
+}: ResponseType): ResponseType {
+  return {
+    status,
+    message,
+    data,
+  };
 }
