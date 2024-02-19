@@ -8,6 +8,8 @@ import {
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { AuthService } from './auth.service';
+import { SignUserDto } from './dto/update-user.dto';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const UsePublic = () => SetMetadata(IS_PUBLIC_KEY, true);
@@ -17,6 +19,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
+    private readonly authService: AuthService,
   ) {}
 
   async canActivate(
@@ -37,9 +40,19 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      request['user'] = await this.jwtService.verifyAsync(token, {
+      const userVerified = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
+
+      const user: SignUserDto = await this.authService.findOne({
+        username: userVerified.username,
+      });
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+
+      request['user'] = userVerified;
     } catch {
       throw new UnauthorizedException();
     }
