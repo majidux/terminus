@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './users/auth.guard';
 import { UsersModule } from './users/users.module';
 import { GroupModule } from './group/group.module';
 import { GroupAccountModule } from './group-account/group-account.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { MemberAccountModule } from './member-account/member-account.module';
 import typeorm from './constant/typeorm';
+import { AuthModule } from './users/auth.module';
 
 @Module({
   imports: [
@@ -21,11 +19,6 @@ import typeorm from './constant/typeorm';
     }),
     DevtoolsModule.register({
       http: process.env.NODE_ENV === 'development',
-    }),
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: `${60 * 60 * 24}` + 's' },
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -42,17 +35,14 @@ import typeorm from './constant/typeorm';
       entities: [__dirname + '/**/*.entity.{ts,js}'],
       synchronize: process.env.NODE_ENV === 'development',
       autoLoadEntities: true,
+      poolSize: 5,
+      logging: 'all',
     }),
     UsersModule,
     GroupModule,
     GroupAccountModule,
     MemberAccountModule,
-  ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+    AuthModule,
   ],
 })
 export class AppModule {
