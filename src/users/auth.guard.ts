@@ -4,6 +4,7 @@ import {
   Injectable,
   SetMetadata,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
@@ -37,7 +38,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('احراز هویت نشده');
     }
     try {
       const userVerified = await this.jwtService.verifyAsync(token, {
@@ -49,12 +50,12 @@ export class AuthGuard implements CanActivate {
       });
 
       if (!user) {
-        throw new UnauthorizedException();
+        throw new NotFoundException('کاربری با این مشخصات وجود ندارد');
       }
 
       request['user'] = userVerified;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('احراز هویت نشده');
     }
     return true;
   }
