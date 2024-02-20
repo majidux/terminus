@@ -7,9 +7,7 @@ export class CreateMemberAccountDto {
   readonly ownerGroup: Group;
   @IsNotEmpty({ message: 'آی دی عضو خالی نمیتواند باشد' })
   readonly ownerMember: GroupMember;
-  readonly bill: string;
-  readonly cashDesk: string;
-  readonly expense: string;
+  readonly paid: string;
   @IsNotEmpty({ message: 'نام نمیتواند خالی باشد' })
   readonly expenseName: string;
   @IsOptional()

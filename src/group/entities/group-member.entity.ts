@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Group } from './group.entity';
-
+ 
 @Entity()
 export class GroupMember {
   @PrimaryGeneratedColumn('uuid')

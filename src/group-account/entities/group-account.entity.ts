@@ -24,7 +24,7 @@ export class GroupAccount {
   @ManyToOne(() => Group, (group) => group.id)
   @JoinColumn()
   groupId: Relation<Group>;
-
+ 
   @Column(() => Date)
   @CreateDateColumn({ type: 'date' })
   createdAt: Date;

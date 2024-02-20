@@ -13,7 +13,7 @@ export class GetGroupDto {
   readonly groupName?: string;
   readonly ownerUserId: string;
 }
-
+ 
 export class CreateAddUserToGroupDto {
   @IsNotEmpty({ message: 'نام عضو نمیتواند خالی باشد' })
   readonly memberName: string;
