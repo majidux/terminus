@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Group } from './group.entity';
- 
+
 @Entity()
 export class GroupMember {
   @PrimaryGeneratedColumn('uuid')
@@ -17,6 +17,9 @@ export class GroupMember {
 
   @Column()
   memberName: string;
+  
+  @Column({ type: 'boolean', default: false })
+  isDeleted: boolean;
 
   @ManyToOne(() => Group, (group) => group.id)
   @JoinColumn()

@@ -42,22 +42,38 @@ export class MemberAccountController {
     }
   }
 
-  @ApiParam({
-    name: 'id',
-    type: 'string',
+  // TODO
+  @ApiBody({
     schema: {
-      type: 'string',
+      type: 'object',
+      properties: {
+        ownerGroup: {
+          type: 'string',
+          default: '',
+        },
+        ownerMember: {
+          type: 'string',
+          default: '',
+        },
+        id: {
+          type: 'string',
+          default: '',
+        },
+      },
     },
   })
-  @Delete('deleteMemberGroup/:id')
-  async deleteGroup(@Param('id') id: string, @Req() request: any) {
+  @Delete('deleteMemberGroup/:ownerGroup')
+  async deleteMemberAccountGroup(
+    @Body() updateMemberAccountDto: UpdateMemberAccountDto,
+  ) {
     try {
-      // const payload: UpdateMemberAccountDto = {
-      //   id: id,
-      //   ownerMember: request.user.id,
-      // };
-      // await this.memberAccountService.deleteMemberGroup(payload);
-      return handleResponse({ message: 'گروه با موفقیت حذف شد' });
+      const payload: UpdateMemberAccountDto = {
+        ownerMember: updateMemberAccountDto.ownerMember,
+        ownerGroup: updateMemberAccountDto.ownerGroup,
+        id: updateMemberAccountDto.id,
+      };
+      await this.memberAccountService.deleteMemberGroup(payload);
+      return handleResponse({ message: 'عضو با موفقیت حذف شد' });
     } catch (error) {
       throw new BadRequestException(error.message);
     }

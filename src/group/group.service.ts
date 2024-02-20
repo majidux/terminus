@@ -32,6 +32,14 @@ export class GroupService {
     });
   }
 
+  // TODO
+  deleteMemberGroup(updateMemberGroupDto: UpdateGroupDto) {
+    return this.groupRepository.save({
+      ...updateMemberGroupDto,
+      isDeleted: true,
+    });
+  }
+
   getGroups(getGroupDto: GetGroupDto) {
     return this.groupRepository.find({
       select: { groupName: true, isDeleted: true },

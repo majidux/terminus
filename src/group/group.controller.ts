@@ -100,4 +100,33 @@ export class GroupController {
       throw new BadRequestException(error.message);
     }
   }
+
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        ownerGroup: {
+          type: 'ownerGroup',
+          default: '9bd4ac03-e9a0-4597-bbc8-df62c858702e',
+        },
+        id: {
+          type: 'string',
+          default: 'e5669c1f-6e9e-4c1c-86ff-a55480771f1a',
+        },
+      },
+    },
+  })
+  @Delete('deleteMemberGroup/:ownerGroup')
+  async deleteMemberGroup(@Body() updateMemberAccountDto: any) {
+    try {
+      const payload: any = {
+        ownerGroup: updateMemberAccountDto.ownerGroup,
+        id: updateMemberAccountDto.id,
+      };
+      await this.groupService.deleteMemberGroup(payload);
+      return handleResponse({ message: 'عضو با موفقیت حذف شد' });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }
